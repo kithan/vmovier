@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mode_fixed">MODE_FIXED</string>
+    <string name="mode_shifting">MODE_SHIFTING</string>
+    <string name="bs_static">BS_STATIC</string>
+    <string name="bs_ripple">BS_RIPPLE</string>
+    <string name="_3_items">3 items</string>
+    <string name="_4_items">4 items</string>
+    <string name="_5_items">5 items</string>
+    <string name="auto_hide_badge">Auto hide badge</string>
+    <string name="toggle_hide">Toggle Hide</string>
+    <string name="toggle_badge">Toggle Badge</string>
+
+</resources>
