@@ -1,9 +1,5 @@
 package com.example.hpb.kunlun.data;
 
-import com.example.hpb.kunlun.home.model.PostTab;
-
-import java.util.List;
-
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
