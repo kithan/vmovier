@@ -41,6 +41,7 @@ dependencies {
 
     compile 'com.ashokvarma.android:bottom-navigation-bar:1.2.2'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.7.4'
+    compile 'com.jaeger.statusbaruitl:library:1.1.0'
 
 
 }
