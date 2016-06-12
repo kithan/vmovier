@@ -3,8 +3,7 @@
     package="com.example.hpb.kunlun">
 
 
-
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,6 +25,10 @@
             android:name=".SearchActivity"
             android:label="@string/title_activity_news"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".player.view.PlayerActivity"
+            android:screenOrientation="sensor"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

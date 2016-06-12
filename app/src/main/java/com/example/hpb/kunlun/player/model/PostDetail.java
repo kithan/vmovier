@@ -1,4 +1,4 @@
-package com.example.hpb.kunlun.home.model;
+package com.example.hpb.kunlun.player.model;
 
 import java.util.List;
 

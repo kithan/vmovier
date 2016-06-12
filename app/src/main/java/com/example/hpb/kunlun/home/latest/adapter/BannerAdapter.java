@@ -19,11 +19,11 @@ import java.util.List;
  * Created by 0000- on 2016/6/11.
  */
 public class BannerAdapter extends PagerAdapter {
-    List<Banner> banners;
+    ArrayList<View> views;
     Context context;
 
-    public BannerAdapter(List<Banner> banners) {
-        this.banners = banners;
+    public BannerAdapter(ArrayList<View> views) {
+        this.views = views;
     }
 
     @Override
@@ -42,13 +42,14 @@ public class BannerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        View view = LayoutInflater.from(container.getContext()).inflate(R.layout.item_banner, null);
-        position %= banners.size();
+        position %= views.size();
         if (position < 0) {
-            position = banners.size() + position;
+            position = views.size() + position;
         }
+        View view = views.get(position);
+        Banner banner = (Banner) view.getTag();
         Glide.with(container.getContext())
-                .load(banners.get(position).getImage())
+                .load(banner.getImage())
                 .into((ImageView) view.findViewById(R.id.banner));
         ViewParent vp = view.getParent();
         if (vp != null) {

@@ -2,7 +2,8 @@ package com.example.hpb.kunlun.data;
 
 import com.example.hpb.kunlun.home.latest.model.Banner;
 import com.example.hpb.kunlun.home.model.Cate;
-import com.example.hpb.kunlun.home.model.PostDetail;
+import com.example.hpb.kunlun.player.model.Comment;
+import com.example.hpb.kunlun.player.model.PostDetail;
 import com.example.hpb.kunlun.home.latest.model.PostTab;
 import com.example.hpb.kunlun.home.model.Series;
 
@@ -28,7 +29,7 @@ public interface VmovierApi {
     @GET("/apiv3/post/view")
     Observable<HttpResult<PostDetail>> getPostDetail(@Query("postid") int postId);
     @GET("/apiv3/comment/getLists")
-    Observable<HttpResult<PostDetail>> getComments(@Query("p") int page,@Query("postid") int postId,@Query("type") int type);
+    Observable<HttpResult<List<Comment>>> getComments(@Query("p") int page, @Query("postid") int postId, @Query("type") int type);
 
     @GET("/apiv3/backstage/getCate")
     Observable<HttpResult<PostDetail>> getBackstageCate();

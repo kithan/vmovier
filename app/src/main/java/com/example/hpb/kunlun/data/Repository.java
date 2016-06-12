@@ -24,7 +24,7 @@ public class Repository {
     private static Repository mInstance;
     //    private static final String API_DEV_URL="https://api.github.com";
 //    private static final String DOUBAN="https://api.douban.com/v2/movie/";
-    private static final String VMOVIER_URL = "http://app.vmoiver.com";
+    public static final String VMOVIER_URL = "http://app.vmoiver.com";
 
     public static Repository getInstance() {
         if (mInstance == null) {

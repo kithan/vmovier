@@ -12,9 +12,12 @@ import android.view.MenuItem;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.example.hpb.kunlun.BaseActivity;
+import com.example.hpb.kunlun.BasePresenter;
 import com.example.hpb.kunlun.R;
 import com.example.hpb.kunlun.data.RxBus;
 import com.example.hpb.kunlun.home.channel.view.ChannelFragment;
+import com.example.hpb.kunlun.home.latest.presenter.LatestPresenter;
 import com.example.hpb.kunlun.home.latest.view.LatestFragment;
 import com.jaeger.library.StatusBarUtil;
 
@@ -23,7 +26,7 @@ import butterknife.ButterKnife;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     @BindView(R.id.tabs)
     RadioGroup tabs;
     @BindView(R.id.rb_latest)
@@ -35,11 +38,17 @@ public class MainActivity extends AppCompatActivity {
     CompositeSubscription _subscriptions;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        StatusBarUtil.setColor(this, ContextCompat.getColor(this,R.color.colorPrimary));
-        ButterKnife.bind(this);
+    public BasePresenter initPresenter() {
+        return null;
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public void initViews() {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -73,36 +82,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        //presenter.loadCateList();
 
         _subscriptions = new CompositeSubscription();
         _subscriptions.add(RxBus.getInstance().toObserverable().subscribe(new Action1<Object>() {
             @Override
             public void call(Object event) {
-                if (event instanceof LatestFragment.UpdateTabTitleEvent) {
-                    latestBtn.setText(((LatestFragment.UpdateTabTitleEvent) event).getTitle());
+                if (event instanceof LatestPresenter.UpdateTabTitleEvent) {
+                    latestBtn.setText(((LatestPresenter.UpdateTabTitleEvent) event).getTitle());
                 }
             }
         }));
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -135,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        _subscriptions.unsubscribe();
+        if(_subscriptions!=null){
+            _subscriptions.unsubscribe();
+        }
     }
 }

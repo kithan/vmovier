@@ -7,5 +7,5 @@
     <com.example.hpb.kunlun.View.AutoScrollViewPager
         android:id="@+id/vp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.example.hpb.kunlun.View.AutoScrollViewPager>
+        android:layout_height="180dp"></com.example.hpb.kunlun.View.AutoScrollViewPager>
 </LinearLayout>

@@ -24,6 +24,7 @@ public class RxHelp<T> {
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                        RxBus.getInstance().send(new HttpError(1,e.getMessage()));
                     }
 
                     @Override
