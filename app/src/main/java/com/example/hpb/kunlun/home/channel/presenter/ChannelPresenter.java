@@ -33,7 +33,7 @@ public class ChannelPresenter extends BasePresenter<IChannelView>  {
     }
 
     @Override
-    public void onEventError(HttpError error) {
+    public void onEvent(Object object) {
 
     }
 }

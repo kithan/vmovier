@@ -10,32 +10,41 @@ import rx.schedulers.Schedulers;
  */
 public class RxHelp<T> {
 
+    private Subscriber subscriber;
 
-    public void  toSubscribe(Observable<T>observable, final OnNext<T> onNext){
+    public RxHelp toSubscribe(Observable<T> observable, final OnNext<T> onNext) {
+        Subscriber subscriber = new Subscriber<T>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+                RxBus.getInstance().send(new HttpError(1, e.getMessage()));
+            }
+
+            @Override
+            public void onNext(T t) {
+                onNext.onNext(t);
+            }
+
+        };
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<T>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        RxBus.getInstance().send(new HttpError(1,e.getMessage()));
-                    }
-
-                    @Override
-                    public void onNext(T t){
-                        onNext.onNext(t);
-                    }
-
-                });
+                .subscribe(subscriber);
+        return this;
     }
 
-    public interface  OnNext<T>{
+    public void unSubscribe() {
+        if (subscriber != null && !subscriber.isUnsubscribed()) {
+            subscriber.unsubscribe();
+        }
+    }
+
+    public interface OnNext<T> {
         public void onNext(T t);
     }
 }

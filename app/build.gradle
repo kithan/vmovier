@@ -18,6 +18,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/beans.xml'
+    }
+}
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url 'http://4thline.org/m2'
+    }
 }
 apt {
     arguments {
@@ -53,6 +63,15 @@ dependencies {
 //    apt 'com.f2prateek.dart:dart-processor:2.0.0'
     compile 'com.f2prateek.dart:henson:2.0.0'
     apt 'com.f2prateek.dart:henson-processor:2.0.0'
+
+
+    compile  'org.fourthline.cling:cling-core:2.1.0'
+    compile 'org.fourthline.cling:cling-support:2.1.0'
+    compile group: 'org.fourthline.cling', name: 'cling-support', version:'2.1.0'
+    compile group: 'org.eclipse.jetty', name: 'jetty-server', version:'8.1.18.v20150929'
+    compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version:'8.1.18.v20150929'
+    compile group: 'org.eclipse.jetty', name: 'jetty-client', version:'8.1.18.v20150929'
+    compile group: 'org.slf4j', name: 'slf4j-jdk14', version:'1.7.14'
 
 
 }

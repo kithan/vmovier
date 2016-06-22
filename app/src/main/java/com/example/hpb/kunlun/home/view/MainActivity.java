@@ -1,14 +1,16 @@
 package com.example.hpb.kunlun.home.view;
 
-import android.os.Bundle;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -19,10 +21,12 @@ import com.example.hpb.kunlun.data.RxBus;
 import com.example.hpb.kunlun.home.channel.view.ChannelFragment;
 import com.example.hpb.kunlun.home.latest.presenter.LatestPresenter;
 import com.example.hpb.kunlun.home.latest.view.LatestFragment;
-import com.jaeger.library.StatusBarUtil;
+import com.example.hpb.kunlun.dlna.upnp.VmovierUpnpService;
+import com.example.hpb.kunlun.dlna.upnp.SystemManager;
+import com.example.hpb.kunlun.dlna.upnp.SystemService;
+import com.example.hpb.kunlun.player.view.DeviceListDialogFragment;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
@@ -92,10 +96,19 @@ public class MainActivity extends BaseActivity {
                 }
             }
         }));
+
+
+        Intent upnpServiceIntent = new Intent(this, VmovierUpnpService.class);
+        bindService(upnpServiceIntent, mUpnpServiceConnection, Context.BIND_AUTO_CREATE);
+        Intent systemServiceIntent = new Intent(this, SystemService.class);
+        bindService(systemServiceIntent, mSystemServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -128,8 +141,45 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(_subscriptions!=null){
+        if (_subscriptions != null) {
             _subscriptions.unsubscribe();
         }
+        unbindService(mUpnpServiceConnection);
+        unbindService(mSystemServiceConnection);
+        SystemManager.getInstance().destroy();
     }
+
+    private ServiceConnection mUpnpServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            VmovierUpnpService.LocalBinder binder = (VmovierUpnpService.LocalBinder) service;
+            VmovierUpnpService beyondUpnpService = binder.getService();
+
+            SystemManager systemManager = SystemManager.getInstance();
+            systemManager.setUpnpService(beyondUpnpService);
+
+            systemManager.searchAllDevices();
+
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName className) {
+            SystemManager.getInstance().setUpnpService(null);
+        }
+    };
+
+    private ServiceConnection mSystemServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            SystemService.LocalBinder systemServiceBinder = (SystemService.LocalBinder) service;
+            SystemManager systemManager = SystemManager.getInstance();
+            systemManager.setSystemService(systemServiceBinder.getService());
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName className) {
+            SystemManager.getInstance().setSystemService(null);
+        }
+    };
 }

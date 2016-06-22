@@ -19,8 +19,7 @@ import rx.Observable;
 /**
  * Created by 0000- on 2016/6/12.
  */
-public class PlayerPresenter extends BasePresenter<IPlayerView>implements IPlayerPresenter {
-
+public class PlayerPresenter extends BasePresenter<IPlayerView> implements IPlayerPresenter {
 
 
     @Override
@@ -28,29 +27,30 @@ public class PlayerPresenter extends BasePresenter<IPlayerView>implements IPlaye
         Observable<PostDetail> observable = Repository.getInstance().getVmovierApi()
                 .getPostDetail(Integer.parseInt(postId))
                 .map(new HttpResultFunc<PostDetail>());
-        new RxHelp<PostDetail>().toSubscribe(observable, new RxHelp.OnNext<PostDetail>() {
+        addRxHelp(new RxHelp<PostDetail>().toSubscribe(observable, new RxHelp.OnNext<PostDetail>() {
             @Override
             public void onNext(PostDetail postDetail) {
                 mView.onGetPostDetail(postDetail);
             }
-        });
+        }));
     }
 
     @Override
     public void getComments(int p, String postId) {
         Observable<List<Comment>> observable = Repository.getInstance().getVmovierApi()
-                .getComments(p,Integer.parseInt(postId),0)
+                .getComments(p, Integer.parseInt(postId), 0)
                 .map(new HttpResultFunc<List<Comment>>());
-        new RxHelp<List<Comment>>().toSubscribe(observable, new RxHelp.OnNext<List<Comment>>() {
-            @Override
-            public void onNext(List<Comment> comments) {
-                mView.onGetComments(comments);
-            }
-        });
+        addRxHelp(
+                new RxHelp<List<Comment>>().toSubscribe(observable, new RxHelp.OnNext<List<Comment>>() {
+                    @Override
+                    public void onNext(List<Comment> comments) {
+                        mView.onGetComments(comments);
+                    }
+                }));
     }
 
     @Override
-    public void onEventError(HttpError error) {
+    public void onEvent(Object object) {
 
     }
 }

@@ -127,7 +127,7 @@ public class LatestPresenter extends BasePresenter<ILatestView>  {
     }
 
     @Override
-    public void onEventError(HttpError error) {
+    public void onEvent(Object object) {
 
     }
 }

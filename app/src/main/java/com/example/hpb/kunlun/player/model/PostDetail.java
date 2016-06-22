@@ -1,11 +1,14 @@
 package com.example.hpb.kunlun.player.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by hpb on 16/6/8.
  */
-public class PostDetail {
+public class PostDetail implements Parcelable {
 
 
     /**
@@ -13,10 +16,10 @@ public class PostDetail {
      * title : 暖心重温成人经典动画《小王子》
      * app_fu_title :
      * intro : 所有大人最初都是孩子，然而，所有的孩子终将长大，时间用最残酷的魔法，将我们变成了当初最不愿成为的那个人。
-
-     本片是由2015年上映的法国大电影《小王子》中截取的片段剪辑而成，去除了小女孩与飞行老爷爷那段现代社会故事线，只留取了与原著本身相关的内容。
-
-     原著《小王子》是法国作家安托万·德·圣·埃克苏佩里，于1942年写成的儿童文学作品，伴随了一代又一代人的成长。作家安托万具有双重身份，他既是一名飞行员，也是一位作家，在他短短44年的人生中，创造了两项别人很难企及的记录，一是创作了这部伟大作品《小王子》，据说迄今为止在全球卖掉了2亿册，二是驾驶着飞机消失在蓝天白云深处，再也没有现身，化作不朽传奇。
+     * <p/>
+     * 本片是由2015年上映的法国大电影《小王子》中截取的片段剪辑而成，去除了小女孩与飞行老爷爷那段现代社会故事线，只留取了与原著本身相关的内容。
+     * <p/>
+     * 原著《小王子》是法国作家安托万·德·圣·埃克苏佩里，于1942年写成的儿童文学作品，伴随了一代又一代人的成长。作家安托万具有双重身份，他既是一名飞行员，也是一位作家，在他短短44年的人生中，创造了两项别人很难企及的记录，一是创作了这部伟大作品《小王子》，据说迄今为止在全球卖掉了2亿册，二是驾驶着飞机消失在蓝天白云深处，再也没有现身，化作不朽传奇。
      * count_comment : 25
      * is_album : 0
      * is_collect : 0
@@ -183,7 +186,7 @@ public class PostDetail {
         this.cate = cate;
     }
 
-    public static class ContentBean {
+    public static class ContentBean implements Parcelable {
         /**
          * image : http://cs.vmoiver.com/Uploads/cover/2016-06-03/5750f8150f6e0_cut.jpeg
          * title : 暖心重温成人经典动画《小王子》
@@ -193,75 +196,48 @@ public class PostDetail {
          * qiniu_url : http://bsy.qiniu.vmovier.vmoiver.com/5750fdbae4936.mp4
          */
 
-        private List<VideoBean> video;
+        private List<VideoInfo> video;
 
-        public List<VideoBean> getVideo() {
+        public List<VideoInfo> getVideo() {
             return video;
         }
 
-        public void setVideo(List<VideoBean> video) {
+        public void setVideo(List<VideoInfo> video) {
             this.video = video;
         }
 
-        public static class VideoBean {
-            private String image;
-            private String title;
-            private String duration;
-            private String filesize;
-            private String source_link;
-            private String qiniu_url;
-
-            public String getImage() {
-                return image;
-            }
-
-            public void setImage(String image) {
-                this.image = image;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
-            }
-
-            public String getDuration() {
-                return duration;
-            }
-
-            public void setDuration(String duration) {
-                this.duration = duration;
-            }
-
-            public String getFilesize() {
-                return filesize;
-            }
-
-            public void setFilesize(String filesize) {
-                this.filesize = filesize;
-            }
-
-            public String getSource_link() {
-                return source_link;
-            }
-
-            public void setSource_link(String source_link) {
-                this.source_link = source_link;
-            }
-
-            public String getQiniu_url() {
-                return qiniu_url;
-            }
-
-            public void setQiniu_url(String qiniu_url) {
-                this.qiniu_url = qiniu_url;
-            }
+        @Override
+        public int describeContents() {
+            return 0;
         }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeTypedList(this.video);
+        }
+
+        public ContentBean() {
+        }
+
+        protected ContentBean(Parcel in) {
+            this.video = in.createTypedArrayList(VideoInfo.CREATOR);
+        }
+
+        public static final Creator<ContentBean> CREATOR = new Creator<ContentBean>() {
+            @Override
+            public ContentBean createFromParcel(Parcel source) {
+                return new ContentBean(source);
+            }
+
+            @Override
+            public ContentBean[] newArray(int size) {
+                return new ContentBean[size];
+            }
+        };
     }
 
-    public static class ShareLinkBean {
+    public static class ShareLinkBean implements Parcelable {
+
         private String sweibo;
         private String weixin;
         private String qzone;
@@ -298,5 +274,99 @@ public class PostDetail {
         public void setQq(String qq) {
             this.qq = qq;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.sweibo);
+            dest.writeString(this.weixin);
+            dest.writeString(this.qzone);
+            dest.writeString(this.qq);
+        }
+
+        public ShareLinkBean() {
+        }
+
+        protected ShareLinkBean(Parcel in) {
+            this.sweibo = in.readString();
+            this.weixin = in.readString();
+            this.qzone = in.readString();
+            this.qq = in.readString();
+        }
+
+        public static final Creator<ShareLinkBean> CREATOR = new Creator<ShareLinkBean>() {
+            @Override
+            public ShareLinkBean createFromParcel(Parcel source) {
+                return new ShareLinkBean(source);
+            }
+
+            @Override
+            public ShareLinkBean[] newArray(int size) {
+                return new ShareLinkBean[size];
+            }
+        };
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.postid);
+        dest.writeString(this.title);
+        dest.writeString(this.app_fu_title);
+        dest.writeString(this.intro);
+        dest.writeString(this.count_comment);
+        dest.writeString(this.is_album);
+        dest.writeString(this.is_collect);
+        dest.writeParcelable(this.content, flags);
+        dest.writeString(this.image);
+        dest.writeString(this.rating);
+        dest.writeString(this.publish_time);
+        dest.writeString(this.count_like);
+        dest.writeString(this.count_share);
+        dest.writeParcelable(this.share_link, flags);
+        dest.writeString(this.tags);
+        dest.writeStringList(this.cate);
+    }
+
+    public PostDetail() {
+    }
+
+    protected PostDetail(Parcel in) {
+        this.postid = in.readString();
+        this.title = in.readString();
+        this.app_fu_title = in.readString();
+        this.intro = in.readString();
+        this.count_comment = in.readString();
+        this.is_album = in.readString();
+        this.is_collect = in.readString();
+        this.content = in.readParcelable(ContentBean.class.getClassLoader());
+        this.image = in.readString();
+        this.rating = in.readString();
+        this.publish_time = in.readString();
+        this.count_like = in.readString();
+        this.count_share = in.readString();
+        this.share_link = in.readParcelable(ShareLinkBean.class.getClassLoader());
+        this.tags = in.readString();
+        this.cate = in.createStringArrayList();
+    }
+
+    public static final Parcelable.Creator<PostDetail> CREATOR = new Parcelable.Creator<PostDetail>() {
+        @Override
+        public PostDetail createFromParcel(Parcel source) {
+            return new PostDetail(source);
+        }
+
+        @Override
+        public PostDetail[] newArray(int size) {
+            return new PostDetail[size];
+        }
+    };
 }

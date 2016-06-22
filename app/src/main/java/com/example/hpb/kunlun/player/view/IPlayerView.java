@@ -13,5 +13,5 @@ public interface IPlayerView {
 
     public void onGetComments(List<Comment> comments);
 
-    void onPlay(String videoSource);
+
 }

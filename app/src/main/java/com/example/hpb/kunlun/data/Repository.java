@@ -106,8 +106,8 @@ public class Repository {
         return new OkHttpClient.Builder()
                 .addInterceptor(new HeaderIntercptor())
                 .addInterceptor(logging)
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(10, TimeUnit.SECONDS)
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
 //                .sslSocketFactory(sslSocketFactory)
                 // 信任所有主机名
 //                .hostnameVerifier((hostname, session) -> true)
