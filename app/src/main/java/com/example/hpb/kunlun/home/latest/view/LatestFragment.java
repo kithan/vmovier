@@ -50,7 +50,6 @@ public class LatestFragment extends BaseFragment<ILatestView, LatestPresenter>
     }
 
 
-
     @Override
     public int getContentView() {
         return R.layout.fragment_latest;
@@ -92,6 +91,7 @@ public class LatestFragment extends BaseFragment<ILatestView, LatestPresenter>
         if (!section.isHeader) {
             Intent intent = Henson.with(getActivity())
                     .gotoPlayerActivity()
+                    .fromCache(false)
                     .postId(section.t.getPostid())
                     .url(section.t.getRequest_url())
                     .build();
@@ -105,8 +105,6 @@ public class LatestFragment extends BaseFragment<ILatestView, LatestPresenter>
     public LatestPresenter initPresenter() {
         return new LatestPresenter();
     }
-
-
 
 
     @Override

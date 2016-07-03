@@ -5,9 +5,12 @@
     <color name="colorAccent">#30000000</color>
     <color name="teal">#00796B</color>
     <color name="brown">#8D6E63</color>
-    <color name="blue">#2196F3</color>
+    <color name="yellow">#c8c645</color>
+    <color name="blue">#0000FF</color>
     <color name="grey">#607D8B</color>
     <color name="orange">#F57C00</color>
     <color name="light_gray">#bab9b9</color>
     <color name="mask">#50000000</color>
+    <color name="color_material_metaphor">#039BE5</color>
+    <color name="color_dark_material_metaphor">#0277BD</color>
 </resources>

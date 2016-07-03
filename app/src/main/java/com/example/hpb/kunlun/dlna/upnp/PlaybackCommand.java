@@ -20,7 +20,7 @@ import android.os.Message;
 import android.util.Log;
 
 
-import com.example.hpb.kunlun.player.view.PlayerFragment;
+import com.example.hpb.kunlun.player.view.PlayerActivity;
 
 import org.fourthline.cling.controlpoint.ControlPoint;
 import org.fourthline.cling.model.action.ActionInvocation;
@@ -178,7 +178,7 @@ public class PlaybackCommand {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            handler.sendEmptyMessage(PlayerFragment.RESUME_SEEKBAR_ACTION);
+                            handler.sendEmptyMessage(PlayerActivity.RESUME_SEEKBAR_ACTION);
                         }
                     }, 1000);
                 }
@@ -203,7 +203,7 @@ public class PlaybackCommand {
 
                 @Override
                 public void received(ActionInvocation invocation, MediaInfo mediaInfo) {
-                    Message msg = Message.obtain(handler, PlayerFragment.GET_MEDIA_INFO_ACTION);
+                    Message msg = Message.obtain(handler, PlayerActivity.GET_MEDIA_INFO_ACTION);
                     msg.obj = mediaInfo;
                     msg.sendToTarget();
                 }
@@ -227,7 +227,7 @@ public class PlaybackCommand {
             cp.execute(new GetPositionInfo(avtService) {
                 @Override
                 public void received(ActionInvocation invocation, PositionInfo positionInfo) {
-                    Message msg = Message.obtain(handler, PlayerFragment.GET_POSITION_INFO_ACTION);
+                    Message msg = Message.obtain(handler, PlayerActivity.GET_POSITION_INFO_ACTION);
                     msg.obj = positionInfo;
                     msg.sendToTarget();
                 }
@@ -256,11 +256,11 @@ public class PlaybackCommand {
                     Log.i(TAG, "TransportState:" + ts.getValue());
 
                     if (TransportState.PLAYING == ts) {
-                        handler.sendEmptyMessage(PlayerFragment.PLAY_ACTION);
+                        handler.sendEmptyMessage(PlayerActivity.PLAY_ACTION);
                     } else if (TransportState.PAUSED_PLAYBACK == ts) {
-                        handler.sendEmptyMessage(PlayerFragment.PAUSE_ACTION);
+                        handler.sendEmptyMessage(PlayerActivity.PAUSE_ACTION);
                     } else if (TransportState.STOPPED == ts) {
-                        handler.sendEmptyMessage(PlayerFragment.STOP_ACTION);
+                        handler.sendEmptyMessage(PlayerActivity.STOP_ACTION);
                     }
                 }
 
@@ -286,7 +286,7 @@ public class PlaybackCommand {
                 public void received(ActionInvocation actionInvocation, int currentVolume) {
                     //Send currentVolume to handler.
                     Log.i(TAG, "GetVolume:" + currentVolume);
-                    Message msg = Message.obtain(handler, PlayerFragment.GET_VOLUME_ACTION, currentVolume, 0);
+                    Message msg = Message.obtain(handler, PlayerActivity.GET_VOLUME_ACTION, currentVolume, 0);
                     msg.sendToTarget();
                 }
 

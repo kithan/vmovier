@@ -3,17 +3,47 @@ package com.example.hpb.kunlun.player.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import io.realm.RealmObject;
+
 /**
  * Created by 0000- on 2016/6/13.
  */
-public class VideoInfo implements Parcelable {
+public class VideoInfo extends RealmObject implements Parcelable {
 
+    private int downloadId;
+    private int downloadStatus;
+    private String postId;
     private String image;
     private String title;
     private String duration;
     private String filesize;
     private String source_link;
     private String qiniu_url;
+
+    public int getDownloadId() {
+        return downloadId;
+    }
+
+    public void setDownloadId(int downloadId) {
+        this.downloadId = downloadId;
+    }
+
+    public int getDownloadStatus() {
+        return downloadStatus;
+    }
+
+    public void setDownloadStatus(int downloadStatus) {
+        this.downloadStatus = downloadStatus;
+    }
+
+    public String getPostId() {
+        return postId;
+    }
+
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
 
     public String getImage() {
         return image;

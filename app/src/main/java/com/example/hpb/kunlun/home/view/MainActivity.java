@@ -4,13 +4,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Handler;
+import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -18,15 +20,17 @@ import com.example.hpb.kunlun.BaseActivity;
 import com.example.hpb.kunlun.BasePresenter;
 import com.example.hpb.kunlun.R;
 import com.example.hpb.kunlun.data.RxBus;
+import com.example.hpb.kunlun.dlna.upnp.SystemManager;
+import com.example.hpb.kunlun.dlna.upnp.SystemService;
+import com.example.hpb.kunlun.dlna.upnp.VmovierUpnpService;
 import com.example.hpb.kunlun.home.channel.view.ChannelFragment;
 import com.example.hpb.kunlun.home.latest.presenter.LatestPresenter;
 import com.example.hpb.kunlun.home.latest.view.LatestFragment;
-import com.example.hpb.kunlun.dlna.upnp.VmovierUpnpService;
-import com.example.hpb.kunlun.dlna.upnp.SystemManager;
-import com.example.hpb.kunlun.dlna.upnp.SystemService;
-import com.example.hpb.kunlun.player.view.DeviceListDialogFragment;
+import com.example.hpb.kunlun.home.menu.MenuFragment;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
@@ -40,6 +44,12 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.container)
     ViewPager mViewPager;
     CompositeSubscription _subscriptions;
+    @BindView(R.id.menu_left)
+    ImageView menuLeft;
+    @BindView(R.id.rb_channel)
+    RadioButton rbChannel;
+    @BindView(R.id.main_content)
+    LinearLayout mainContent;
 
     @Override
     public BasePresenter initPresenter() {
@@ -51,8 +61,11 @@ public class MainActivity extends BaseActivity {
         return R.layout.activity_main;
     }
 
+
     @Override
     public void initViews() {
+
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -102,12 +115,29 @@ public class MainActivity extends BaseActivity {
         bindService(upnpServiceIntent, mUpnpServiceConnection, Context.BIND_AUTO_CREATE);
         Intent systemServiceIntent = new Intent(this, SystemService.class);
         bindService(systemServiceIntent, mSystemServiceConnection, Context.BIND_AUTO_CREATE);
+
+
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+
+    MenuFragment menuFragment;
+
+    @OnClick(R.id.menu_left)
+    public void onClick() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (menuFragment == null) {
+            menuFragment = new MenuFragment();
+            transaction.add(R.id.menu, menuFragment);
+        } else {
+            transaction.show(menuFragment);
+        }
+        transaction.commit();
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

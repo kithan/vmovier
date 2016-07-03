@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.ScaleAnimation;
@@ -30,6 +31,9 @@ public class SplashActivity extends BaseActivity {
         return R.layout.activity_splash;
     }
 
+    public static final String PREF_KEY_FIRST_START = "com.example.hpb.PREF_KEY_START";
+    public static final int REQUEST_CODE_INTRO = 1;
+
     @Override
     public void initViews() {
 
@@ -55,6 +59,20 @@ public class SplashActivity extends BaseActivity {
             }
         });
         splash.startAnimation(scaleAnimation);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_INTRO) {
+            if (resultCode == RESULT_CANCELED) {
+                PreferenceManager.getDefaultSharedPreferences(this).edit()
+                        .putBoolean(PREF_KEY_FIRST_START, true)
+                        .apply();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
+            }
+        }
     }
 
 }

@@ -1,85 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    tools:context="com.example.hpb.kunlun.MainActivity"
-    >
+    tools:context="com.example.hpb.kunlun.home.view.MainActivity">
 
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:background="@android:color/black"
-      android:paddingLeft="10dp"
-      android:paddingRight="10dp"
-      >
+    <RelativeLayout
+        android:id="@+id/layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/black"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
-    <ImageView
-        android:id="@+id/menu_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/home_side"
-        />
+        <ImageView
+            android:id="@+id/menu_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/home_side" />
 
-    <RadioGroup
-        android:id="@+id/tabs"
-        android:gravity="center_vertical"
-        android:layout_width="wrap_content"
+        <RadioGroup
+            android:id="@+id/tabs"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_latest"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/tab_selector"
+                android:button="@null"
+                android:checked="true"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="最新"
+                android:textColor="@color/tab_text" />
+
+            <RadioButton
+                android:id="@+id/rb_channel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/tab_selector"
+                android:button="@null"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="频道"
+                android:textColor="@color/tab_text" />
+        </RadioGroup>
+
+        <ImageView
+            android:id="@+id/iv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/home_search" />
+
+    </RelativeLayout>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/container"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:orientation="horizontal"
-        >
+        android:layout_below="@id/layout_title" />
 
-      <RadioButton
-          android:id="@+id/rb_latest"
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:background="@drawable/tab_selector"
-          android:button="@null"
-          android:checked="true"
-          android:paddingLeft="4dp"
-          android:paddingRight="4dp"
-          android:layout_marginRight="20dp"
-          android:text="最新"
-          android:textColor="@color/tab_text"
-          />
+    <FrameLayout
+        android:id="@+id/menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/layout_title"></FrameLayout>
 
-      <RadioButton
-          android:id="@+id/rb_channel"
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:background="@drawable/tab_selector"
-          android:button="@null"
-          android:layout_marginRight="20dp"
-          android:paddingLeft="4dp"
-          android:paddingRight="4dp"
-          android:text="频道"
-          android:textColor="@color/tab_text"
-          />
-    </RadioGroup>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/home_search"
-        />
-
-  </RelativeLayout>
-
-
-  <android.support.v4.view.ViewPager
-      android:id="@+id/container"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      />
-
-
-</LinearLayout>
+</RelativeLayout>

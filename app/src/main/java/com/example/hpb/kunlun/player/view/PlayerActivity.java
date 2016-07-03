@@ -1,6 +1,7 @@
 package com.example.hpb.kunlun.player.view;
 
 import android.annotation.TargetApi;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,8 +18,8 @@ import com.example.hpb.kunlun.R;
 import com.example.hpb.kunlun.Utils;
 import com.example.hpb.kunlun.data.RxBus;
 import com.example.hpb.kunlun.player.model.Comment;
-import com.example.hpb.kunlun.player.model.LandscapeEvent;
 import com.example.hpb.kunlun.player.model.PostDetail;
+import com.example.hpb.kunlun.player.model.VideoInfo;
 import com.example.hpb.kunlun.player.presenter.PlayerPresenter;
 import com.f2prateek.dart.Dart;
 import com.f2prateek.dart.InjectExtra;
@@ -27,13 +28,23 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import fm.jiecao.jcvideoplayer_lib.JCFullScreenActivity;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 /**
  * Created by 0000- on 2016/6/12.
  */
-public class PlayerActivity extends BaseActivity<IPlayerView, PlayerPresenter> implements IPlayerView, FragmentCallback {
+public class PlayerActivity extends BaseActivity<IPlayerView, PlayerPresenter> implements IPlayerView {
 
-
+    public static final int PLAY_ACTION = 0xa1;
+    public static final int PAUSE_ACTION = 0xa2;
+    public static final int STOP_ACTION = 0xa3;
+    public static final int GET_MEDIA_INFO_ACTION = 0xa4;
+    public static final int GET_POSITION_INFO_ACTION = 0xa5;
+    public static final int RESUME_SEEKBAR_ACTION = 0xa6;
+    public static final int GET_VOLUME_ACTION = 0xa7;
+    public static final int SET_VOLUME_ACTION = 0xa8;
     @BindView(R.id.webView)
     WebView webView;
 
@@ -42,10 +53,12 @@ public class PlayerActivity extends BaseActivity<IPlayerView, PlayerPresenter> i
     String url;
     @InjectExtra("postId")
     String postId;
+    @InjectExtra
+    boolean fromCache = false;
 
 
-    @BindView(R.id.layout_player)
-    View playerLayout;
+    @BindView(R.id.videoplayer)
+    JCVideoPlayerStandard jcVideoPlayerStandard;
     @BindView(R.id.layout_bottom)
     View bottomLayout;
     @BindView(R.id.layout_comment)
@@ -71,6 +84,8 @@ public class PlayerActivity extends BaseActivity<IPlayerView, PlayerPresenter> i
 
         postId = Dart.get(getIntent().getExtras(), "postId");
         url = Dart.get(getIntent().getExtras(), "url");
+        fromCache = Dart.get(getIntent().getExtras(), "fromCache");
+
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadWithOverviewMode(true);
@@ -92,13 +107,18 @@ public class PlayerActivity extends BaseActivity<IPlayerView, PlayerPresenter> i
 
     }
 
+    String title;
+    String videoPath;
+
     public void onGetPostDetail(PostDetail detail) {
-        Bundle bundle = new Bundle();
-        bundle.putString("title", detail.getTitle());
-        bundle.putString("videoPath", detail.getContent().getVideo().get(0).getQiniu_url());
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.layout_player, Fragment.instantiate(this, PlayerFragment.class.getName(), bundle))
-                .commit();
+        title = detail.getTitle();
+        videoPath = detail.getContent().getVideo().get(0).getQiniu_url();
+        jcVideoPlayerStandard.setUp(videoPath, title);
+        jcVideoPlayerStandard.startButton.performClick();
+
+        if (fromCache) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
     }
 
 
@@ -110,28 +130,33 @@ public class PlayerActivity extends BaseActivity<IPlayerView, PlayerPresenter> i
     @OnClick({R.id.iv_bottom_download})
     public void downloadClick(View v) {
 
+        VideoInfo videoInfo = new VideoInfo();
+        videoInfo.setTitle(title);
+        videoInfo.setSource_link(videoPath);
+        presenter.addDownload(videoInfo);
     }
-
 
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         boolean landscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
-        if (landscape) {
-            bottomLayout.setVisibility(View.GONE);
-            playerLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        } else {
-            bottomLayout.setVisibility(View.VISIBLE);
-            playerLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Utils.dp2px(this, 200)));
-        }
-        RxBus.getInstance().send(new LandscapeEvent(landscape));
+//        if (landscape) {
+//            bottomLayout.setVisibility(View.GONE);
+//            JCFullScreenActivity.startActivity(this,
+//                    videoPath,
+//                    JCVideoPlayerStandard.class,
+//                    title);
+//        } else {
+//            bottomLayout.setVisibility(View.VISIBLE);
+//        }
     }
 
 
     @Override
     protected void onPause() {
         super.onPause();
+        JCVideoPlayer.releaseAllVideos();
     }
 
     public void onGetComments(List<Comment> comments) {
@@ -143,17 +168,6 @@ public class PlayerActivity extends BaseActivity<IPlayerView, PlayerPresenter> i
     public PlayerPresenter initPresenter() {
         return new PlayerPresenter();
     }
-
-
-    @Override
-    public void finishActivity() {
-        finish();
-    }
-
-
-
-
-
 
 
 }

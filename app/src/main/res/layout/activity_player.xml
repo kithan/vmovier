@@ -4,22 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/layout_player"
+    <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
+        android:id="@+id/videoplayer"
         android:layout_width="match_parent"
-        android:layout_height="200dp"></FrameLayout>
+        android:layout_height="200dp" />
 
     <WebView
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/layout_player"></WebView>
+        android:layout_below="@id/videoplayer"></WebView>
 
     <RelativeLayout
         android:id="@+id/layout_comment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/layout_player"></RelativeLayout>
+        android:layout_below="@id/videoplayer"></RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/layout_bottom"
